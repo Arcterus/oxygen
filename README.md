@@ -1,3 +1,3 @@
 #Oxygen
 
-A Lisp-based compiler written in c++
+Oxygen is a simple parser written in C++ that is run from the command line. 
