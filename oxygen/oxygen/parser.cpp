@@ -28,11 +28,11 @@ static ExprAST *parseExpression();
 
 static ExprAST *parseIdentifierExpr() {
 	std::string id = identifier;
-	getNextToken(); 
+	getNextToken();
 
 	if (currToken != '(') return new VariableExprAST(id);
 	//eat the '('
-	getNextToken(); 
+	getNextToken();
 	std::vector<ExprAST*> args;
 
 	//get the parenthesized expression
@@ -155,11 +155,46 @@ static FunctionAST *parseTopLevelExpr() {
 
 //extern name
 static PrototypeAST *parseExtern() {
-	getNextToken();  
+	getNextToken();
 	return parsePrototype();
 }
 
-//skop token
+static void evaluateDefinition() {
+	if (parseDefinition()) fprintf(stdout, "Parsed a function definition.\n");
+	else getNextToken();
+}
+
+static void evaluateExtern() {
+	if (parseExtern()) fprintf(stdout, "Parsed an extern\n");
+	else getNextToken();
+}
+
+static void evaluateTopLevelExpression() {
+	if (parseTopLevelExpr()) fprintf(stdout, "Parsed a top-level expr\n");
+	else getNextToken();
+}
+
+//definition | external | expression | ';'
+static void run() {
+	while (1) {
+		switch (currToken) {
+		case tok_eof:
+			return;
+		case ';':
+			getNextToken();
+			break;
+		case tok_def:
+			evaluateDefinition(); break;
+		case tok_extern:
+			evaluateExtern(); break;
+		default:
+			evaluateTopLevelExpression(); break;
+		}
+		fprintf(stdout, "oxygen> ");
+	}
+}
+
+//skip token
 static int getNextToken() {
 	return currToken = gettoken();
 }
