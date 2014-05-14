@@ -1,7 +1,7 @@
 #include <iostream>
 
 // The lexer returns tokens [0-255] if it is an unknown character, otherwise one
-// of these for known ops.
+// of these for known things.
 enum Token {
 	tok_eof = -1,			// EOF
 	tok_def = -2,			// Function definition ("def")
@@ -21,7 +21,7 @@ static int gettoken() {
 
 	// matches regex [a-zA-Z][a-zA-Z0-9]*
 	if (isalpha(currChar))
-	{ 
+	{
 		identifier = currChar;
 		//add all following characters to the identifier
 		while (isalnum((currChar = getchar()))) identifier += currChar;
@@ -35,7 +35,7 @@ static int gettoken() {
 	}
 
 	// matches regex [0-9.]+
-	if (isdigit(currChar) || currChar == '.') {   
+	if (isdigit(currChar) || currChar == '.') {
 		std::string temp;
 		do {
 			temp += currChar;
@@ -48,6 +48,7 @@ static int gettoken() {
 		//return tok_number (found a number)
 		return tok_number;
 	}
+
 
 	if (currChar == '#') {
 		// Comment until end of line.
